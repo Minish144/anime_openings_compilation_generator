@@ -31,3 +31,5 @@ class OpeningsMoe(OpeningsDB):
         self.op_list = self.op_list.where(pd.notnull(self.op_list), None)
 
         self.op_list['Song_Type'] = self.op_list['Song_Type'].apply(lambda x: self.__song_type_upd(x))
+        self.op_list['Video_URL'] = self.op_list['Video_URL'].str.replace('：', '%EF%BC%9A')
+        self.op_list = self.op_list.reindex(columns=['Anime_Title', 'Song_Artist', 'Song_Title', 'Song_Type', 'Video_URL'])
