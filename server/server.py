@@ -29,5 +29,5 @@ class Server:
     def __set_routes(self) -> None:
         self.__get_op = self.session.route('/api/songs/random')(self.__get_random_songs)
 
-    def run(self, host: str = '127.0.0.1', port: str = '5000') -> None:
+    def run(self, host: str = '0.0.0.0', port: str = '5000') -> None:
         self.session.run(host=host, port=port)
