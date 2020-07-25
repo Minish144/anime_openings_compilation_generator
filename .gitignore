@@ -5,7 +5,12 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+__pycache__
+*.pyc 
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
+
+# Test Files
+test.py
