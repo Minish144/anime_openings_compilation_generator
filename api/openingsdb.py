@@ -7,7 +7,7 @@ class OpeningsDB():
         self.init_url()
         self.set_dataset()
         self.process_dataset()
-        
+
     def init_url(self):
         self.api_url = "https://openings.moe/api/list.php"
 
@@ -24,5 +24,5 @@ class OpeningsDB():
     def process_dataset(self) -> None:
         pass
 
-    def display_openings_list(self, count: Union[int, None] = None) -> None:
-        print(self.op_list) if count == None else print(self.op_list.head(count))
+    def get_openings_list(self, count: Union[int, None] = None) -> None:
+       return self.op_list if count == None else self.op_list.head(count)
