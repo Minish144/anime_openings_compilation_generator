@@ -16,9 +16,13 @@ class Server:
         
     def __get_random_songs(self) -> flask.wrappers.Response:
         count: int = int(flask.request.args.get('count'))
+        
         song_type: int = int(flask.request.args.get('type'))
+        if not song_type:
+            song_type = 3
 
-        response = self.facade.get_random_webms(count, song_type)
+        response = self.facade.get_random_webms(count=count, 
+                                                song_type=song_type)
 
         return flask.jsonify(response)
 

@@ -2,14 +2,14 @@ from api.animethemes import AnimeThemes
 from api.openingsmoe import OpeningsMoe
 
 import pandas as pd
+import numpy as np
 
 class Facade():
     def __init__(self):
-        # try:
-        #     self.song_set = AnimeThemes().get_openings_list()
-        # except:
-
-        self.song_set = OpeningsMoe().get_openings_list()
+        try:
+            self.song_set = AnimeThemes().get_openings_list()
+        except:
+            self.song_set = OpeningsMoe().get_openings_list()
 
     def __song_type(self, song_type: int) -> str:
         if song_type == 1:
@@ -28,5 +28,5 @@ class Facade():
             df = self.__song_type_handle(self.song_set, song_type)
         else:
             df = self.song_set
-        response = df.sample(n=count, replace=False, random_state=1)
+        response = df.sample(n=count, replace=False, random_state=np.random.randint(1, 100000000))
         return response.to_dict('r')
