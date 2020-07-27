@@ -45,3 +45,6 @@ class Facade():
             'count': count,
             'items': response.to_dict('r')
         }
+    
+    def find_anime_by_query(self, title: str) -> list:
+        return self.utils.find_simillar(self.title_list, title)

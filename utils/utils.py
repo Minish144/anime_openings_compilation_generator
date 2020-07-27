@@ -9,7 +9,7 @@ class Utils():
     def __clear_string_from_garbage(self, strr: str) -> str:
         for char in string.punctuation:
             strr = strr.replace(char,"")
-            
+
         strr = re.sub(r'\s+', ' ', strr)
 
         return strr
@@ -28,12 +28,10 @@ class Utils():
         req = self.__clear_string_from_garbage(req)
         lst = self.__clear_list_of_strings_from_garbage(lst)
 
-        print(lst)
-
         for elem in lst:
             if req in elem:
                 response_list.append(elem)
-            elif fuzz.ratio(elem, req) > 60:
+            elif fuzz.ratio(elem, req) > 75:
                 response_list.append(elem)
         
         return response_list
