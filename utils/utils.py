@@ -11,7 +11,8 @@ class Utils():
             strr = strr.replace(char,"")
 
         strr = re.sub(r'\s+', ' ', strr)
-
+        strr = strr.lower()
+        
         return strr
 
     def __clear_list_of_strings_from_garbage(self, strings: list) -> list:
@@ -29,8 +30,8 @@ class Utils():
         lst = self.__clear_list_of_strings_from_garbage(lst)
 
         for elem in lst:
-            if req in elem:
-                response_list.append(elem)
+            if elem.find(req) != -1:
+                response_list.append(elem)  
             elif fuzz.ratio(elem, req) > 75:
                 response_list.append(elem)
         

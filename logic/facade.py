@@ -34,28 +34,41 @@ class Facade():
         return df[df['Song_Type'].str.contains(contains)]
 
     def __get_df_with_exact_titles(self, df: pd.DataFrame, titles: list) -> pd.DataFrame:
-        return df[df['Anime_Title'].isin(titles)]
+        print('titles list: ', titles)
+        return df[df['Anime_Title'].str.lower().isin(titles)]
 
     def __find_anime_by_query(self, title: str) -> list:
-        return self.utils.find_simillar(self.title_list, title)
+        response = self.utils.find_simillar(self.title_list, title)
+        print(response)
+
+        return response
 
     def get_random_webms(self, count: int, song_type: int = 3, df: pd.DataFrame = None) -> dict:
-        if type(df) != pd.DataFrame:
-            df = self.song_set
-            
-        if song_type in [1, 2]:
-            df = self.__song_type_handle(df, song_type)
+        try:
+            if type(df) != pd.DataFrame:
+                df = self.song_set
+                
+            if song_type in [1, 2]:
+                df = self.__song_type_handle(df, song_type)
+            response = df.sample(n=count, replace=True, random_state=np.random.randint(1, 10000000))
 
-        response = df.sample(n=count, replace=False, random_state=np.random.randint(1, 100000000))
+            return {
+                'count': count,
+                'items': response.to_dict('r')
+            }
+        except Exception as e:
+            print(e)
 
-        return {
-            'count': count,
-            'items': response.to_dict('r')
-        }
+            return {
+                'count': 0,
+                'items': []
+            }
 
     def get_random_webms_by_anime_title(self, count: int, title: str, song_type: int = 3) -> dict:
         titles_list = self.__find_anime_by_query(title)
         df = self.__get_df_with_exact_titles(self.song_set, titles_list)
+        print(df)
+        
         return self.get_random_webms(count=count,
                                     song_type=song_type,
                                     df=df)
