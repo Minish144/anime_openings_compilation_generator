@@ -26,8 +26,17 @@ class Server:
 
         return flask.jsonify(response)
 
+    def _get_random_song_by_anime_title(self) -> flask.wrappers.Response:
+        count: int = int(flask.request.args.get('count'))
+        
+        song_type: int = int(flask.request.args.get('type'))
+        if not song_type:
+            song_type = 3
+            
+
     def __set_routes(self) -> None:
         self.__get_op = self.session.route('/api/songs/random')(self.__get_random_songs)
-
+        self.__get_op_by_title_name = self.session.route('/api/songs/random')(self.__get_random_songs)
+        
     def run(self, host: str = '0.0.0.0', port: str = '5000') -> None:
         self.session.run(host=host, port=port)
