@@ -40,9 +40,9 @@ class Facade():
         return self.utils.find_simillar(self.title_list, title)
 
     def get_random_webms(self, count: int, song_type: int = 3, df: pd.DataFrame = None) -> dict:
-        if type(df) == pd.DataFrame:
+        if type(df) != pd.DataFrame:
             df = self.song_set
-
+            
         if song_type in [1, 2]:
             df = self.__song_type_handle(df, song_type)
 
@@ -56,7 +56,6 @@ class Facade():
     def get_random_webms_by_anime_title(self, count: int, title: str, song_type: int = 3) -> dict:
         titles_list = self.__find_anime_by_query(title)
         df = self.__get_df_with_exact_titles(self.song_set, titles_list)
-
         return self.get_random_webms(count=count,
                                     song_type=song_type,
                                     df=df)
