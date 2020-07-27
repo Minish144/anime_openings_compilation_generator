@@ -14,6 +14,7 @@ class Facade():
             self.song_set = OpeningsMoe().get_openings_list()
 
         self.__init_modules()
+
         self.title_list = self.utils.get_unique_names(self.song_set, 'Anime_Title')
 
     def __init_modules(self):
@@ -29,6 +30,7 @@ class Facade():
 
     def __song_type_handle(self, df: pd.DataFrame, song_type: int) -> pd:
         contains = self.__song_type(song_type)
+        
         return df[df['Song_Type'].str.contains(contains)]
 
     def get_random_webms(self, count: int, song_type: int = 3) -> dict:
@@ -36,12 +38,10 @@ class Facade():
             df = self.__song_type_handle(self.song_set, song_type)
         else:
             df = self.song_set
+
         response = df.sample(n=count, replace=False, random_state=np.random.randint(1, 100000000))
-        
+
         return {
             'count': count,
             'items': response.to_dict('r')
         }
-
-    def find_simillar(self, column: str, req: str):
-        self.utils.find_simillar(self.song_set, "col", req)
