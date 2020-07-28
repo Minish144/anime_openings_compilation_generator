@@ -2,6 +2,7 @@ import pandas as pd
 from fuzzywuzzy import fuzz
 import string
 import re
+
 class Utils():
     def __init__(self):
         pass
@@ -39,3 +40,6 @@ class Utils():
 
     def get_unique_names(self, df: pd.DataFrame, column: str) -> list:
         return df[column].unique()
+
+    def str_to_bool(self, value: str) -> bool:
+        return value.lower() in ("true", "yes", "t", "1")
