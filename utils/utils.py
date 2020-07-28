@@ -8,11 +8,10 @@ class Utils():
 
     def __clear_string_from_garbage(self, strr: str) -> str:
         for char in string.punctuation:
-            strr = strr.replace(char,"")
+            strr = strr.replace(char," ")
 
         strr = re.sub(r'\s+', ' ', strr)
         strr = strr.lower()
-        
         return strr
 
     def __clear_list_of_strings_from_garbage(self, strings: list) -> list:
@@ -25,14 +24,16 @@ class Utils():
 
     def find_simillar(self, lst: list, req: str):
         response_list = []
+        clr = self.__clear_string_from_garbage
 
         req = self.__clear_string_from_garbage(req)
-        lst = self.__clear_list_of_strings_from_garbage(lst)
+        # lst = self.__clear_list_of_strings_from_garbage(lst)
 
         for elem in lst:
-            if elem.find(req) != -1:
+            elem_clrd = clr(elem)
+            if elem_clrd.find(req) != -1:
                 response_list.append(elem)  
-            elif fuzz.ratio(elem, req) > 75:
+            elif fuzz.ratio(elem_clrd, req) > 75:
                 response_list.append(elem)
         
         return response_list
