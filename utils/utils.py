@@ -27,7 +27,6 @@ class Utils():
         clr = self.__clear_string_from_garbage
 
         req = self.__clear_string_from_garbage(req)
-        # lst = self.__clear_list_of_strings_from_garbage(lst)
 
         for elem in lst:
             elem_clrd = clr(elem)
@@ -40,4 +39,3 @@ class Utils():
 
     def get_unique_names(self, df: pd.DataFrame, column: str) -> list:
         return df[column].unique()
-        
