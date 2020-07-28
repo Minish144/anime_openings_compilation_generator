@@ -21,7 +21,7 @@ class Server:
         
 
         count = flask.request.args.get('count')
-        count = int(count) if count else 9999
+        count = int(count) if count else None
         
         song_type = flask.request.args.get('type')
         song_type = int(song_type) if song_type else 4
@@ -52,12 +52,17 @@ class Server:
         return flask.jsonify(titles_list)
 
     def __get_anime_list(self) -> flask.wrappers.Response:
-        pass
+        count = flask.request.args.get('count')
+        count = int(count) if count else None
+
+        response = self.facade.get_list_of_animes(count)
+        
+        return flask.jsonify(response)
 
     def __set_routes(self) -> None:
         self.__api_songs = self.session.route('/api/songs')(self.__get_songs)
         self.__api_songs_anime = self.session.route('/api/songs/<anime_title>')(self.__get_song_list_by_title)
-        self.__api_animes = None
+        self.__api_animes = self.session.route('/api/anime')(self.__get_anime_list)
 
     def run(self, host: str = '0.0.0.0', port: str = '5000') -> None:
         self.session.run(host=host, 

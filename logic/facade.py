@@ -124,14 +124,34 @@ class Facade():
         resp = self.__song_type_handle(df=df, 
                             song_type=song_type)
 
-        count_by_len = len(resp.index)
         resp = resp.to_dict('r')
 
-        if count_by_len > count:
-            resp = resp[:count]
+        count_by_len = len(resp.index)
+        if count:
+            if count_by_len > count:
+                resp = resp[:count]
+            else:
+                count = count_by_len
         else:
             count = count_by_len
 
+        return {
+            'count': count,
+            'items': resp
+        }
+
+    def get_list_of_animes(self, count: int = None):
+        resp = list(self.song_set['Anime_Title'].unique())
+
+        count_by_len = len(resp)
+        if count:
+            if count_by_len > count:
+                resp = resp[:count]
+            else:
+                count = count_by_len
+        else:
+            count = count_by_len
+        
         return {
             'count': count,
             'items': resp
