@@ -1,6 +1,8 @@
 from api.animethemes import AnimeThemes
 from api.openingsmoe import OpeningsMoe
 
+from utils.utils import Utils
+
 import pandas as pd
 import numpy as np
 
@@ -11,6 +13,13 @@ class Facade():
         except:
             self.song_set = OpeningsMoe().get_openings_list()
 
+        self.__init_modules()
+
+        self.title_list = self.utils.get_unique_names(self.song_set, 'Anime_Title')
+
+    def __init_modules(self):
+        self.utils = Utils() # db processing
+
     def __song_type(self, song_type: int) -> str:
         if song_type == 1:
             return 'OP'
@@ -19,14 +28,47 @@ class Facade():
         else:
             return 'OP'
 
-    def __song_type_handle(self, df: pd.DataFrame, song_type: int) -> pd:
+    def __song_type_handle(self, df: pd.DataFrame, song_type: int) -> pd.DataFrame:
         contains = self.__song_type(song_type)
+        
         return df[df['Song_Type'].str.contains(contains)]
 
-    def get_random_webms(self, count: int, song_type: int = 3) -> dict:
-        if song_type in [1, 2]:
-            df = self.__song_type_handle(self.song_set, song_type)
-        else:
-            df = self.song_set
-        response = df.sample(n=count, replace=False, random_state=np.random.randint(1, 100000000))
-        return response.to_dict('r')
+    def __get_df_with_exact_titles(self, df: pd.DataFrame, titles: list) -> pd.DataFrame:
+        resp = df[df['Anime_Title'].isin(titles)]
+        print(resp)
+        return resp
+
+    def __find_anime_by_query(self, title: str) -> list:
+        response = self.utils.find_simillar(self.title_list, title)
+
+        return response
+
+    def get_random_webms(self, count: int, song_type: int = 3, df: pd.DataFrame = None) -> dict:
+        try:
+            if type(df) != pd.DataFrame:
+                df = self.song_set
+                
+            if song_type in [1, 2]:
+                df = self.__song_type_handle(df, song_type)
+            response = df.sample(n=count, replace=True, random_state=np.random.randint(1, 10000000))
+
+            return {
+                'count': count,
+                'items': response.to_dict('r')
+            }
+        except Exception as e:
+            print(e)
+
+            return {
+                'count': 0,
+                'items': []
+            }
+
+    def get_random_webms_by_anime_title(self, count: int, title: str, song_type: int = 3) -> dict:
+        titles_list = self.__find_anime_by_query(title)
+        print(titles_list)
+        df = self.__get_df_with_exact_titles(self.song_set, titles_list)
+        
+        return self.get_random_webms(count=count,
+                                    song_type=song_type,
+                                    df=df)

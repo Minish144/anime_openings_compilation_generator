@@ -1,5 +1,5 @@
 import requests
-import pandas as pd 
+import pandas as pd
 from typing import Union
 
 class OpeningsDB():

@@ -21,13 +21,20 @@ class Server:
         if not song_type:
             song_type = 3
 
-        response = self.facade.get_random_webms(count=count, 
-                                                song_type=song_type)
+        title: str = flask.request.args.get('title')
+
+        if title:
+            response = self.facade.get_random_webms_by_anime_title(count=count,
+                                                    title=title,
+                                                    song_type=song_type)
+        else:
+            response = self.facade.get_random_webms(count=count, 
+                                                    song_type=song_type)
 
         return flask.jsonify(response)
 
     def __set_routes(self) -> None:
         self.__get_op = self.session.route('/api/songs/random')(self.__get_random_songs)
-
+        
     def run(self, host: str = '0.0.0.0', port: str = '5000') -> None:
         self.session.run(host=host, port=port)
