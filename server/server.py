@@ -21,15 +21,13 @@ class Server:
         if not song_type:
             song_type = 3
 
-        title: str = str(flask.request.args.get('title'))
+        title: str = flask.request.args.get('title')
 
         if title:
-            print('yes', title)
             response = self.facade.get_random_webms_by_anime_title(count=count,
                                                     title=title,
                                                     song_type=song_type)
         else:
-            print('not yes')
             response = self.facade.get_random_webms(count=count, 
                                                     song_type=song_type)
 

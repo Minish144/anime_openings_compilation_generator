@@ -34,12 +34,10 @@ class Facade():
         return df[df['Song_Type'].str.contains(contains)]
 
     def __get_df_with_exact_titles(self, df: pd.DataFrame, titles: list) -> pd.DataFrame:
-        print('titles list: ', titles)
         return df[df['Anime_Title'].str.lower().isin(titles)]
 
     def __find_anime_by_query(self, title: str) -> list:
         response = self.utils.find_simillar(self.title_list, title)
-        print(response)
 
         return response
 
@@ -67,7 +65,6 @@ class Facade():
     def get_random_webms_by_anime_title(self, count: int, title: str, song_type: int = 3) -> dict:
         titles_list = self.__find_anime_by_query(title)
         df = self.__get_df_with_exact_titles(self.song_set, titles_list)
-        print(df)
         
         return self.get_random_webms(count=count,
                                     song_type=song_type,
