@@ -27,14 +27,14 @@ class Facade():
             return 'OP'
         elif song_type == 2:
             return 'ED'
-        elif song_type == 4:
+        elif song_type == 3:
             return 'Insert'
         else:
-            return 'OP'
+            return ""
 
     def __song_type_handle(self, df: pd.DataFrame, song_type: int) -> pd.DataFrame:
         contains = self.__song_type(song_type)
-        
+
         return df[df['Song_Type'].str.contains(contains)]
 
     def __get_animes_with_exact_titles(self, df: pd.DataFrame, titles: list) -> pd.DataFrame:
@@ -71,13 +71,14 @@ class Facade():
             'items': response_list
         }
 
-    def get_random_webms(self, count: int, song_type: int = 3, df: pd.DataFrame = None) -> dict:
+    def get_random_webms(self, count: int, song_type: int = 4, df: pd.DataFrame = None) -> dict:
         try:
             if type(df) != pd.DataFrame:
                 df = self.song_set
                 
-            if song_type in [1, 2, 4]:
+            if song_type in [1, 2, 3]:
                 df = self.__song_type_handle(df, song_type)
+
             response = df.sample(n=count, replace=True, random_state=np.random.randint(1, 10000000))
 
             return {
@@ -96,7 +97,7 @@ class Facade():
                 'items': []
             }
 
-    def get_random_webms_by_anime_title(self, count: int, title: str, song_type: int = 3) -> dict:
+    def get_random_webms_by_anime_title(self, count: int, title: str, song_type: int = 4) -> dict:
         try:
             titles_list = self.__find_anime_by_query(title)
 
@@ -116,3 +117,22 @@ class Facade():
                 'count': 0,
                 'items': []
             }
+
+    def get_list_of_animes(self, count: int = None, song_type: int = 4) -> dict:
+        df = self.song_set.sort_values(by='Song_Title')
+
+        resp = self.__song_type_handle(df=df, 
+                            song_type=song_type)
+
+        count_by_len = len(resp.index)
+        resp = resp.to_dict('r')
+
+        if count_by_len > count:
+            resp = resp[:count]
+        else:
+            count = count_by_len
+
+        return {
+            'count': count,
+            'items': resp
+        }

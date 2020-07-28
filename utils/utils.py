@@ -42,4 +42,4 @@ class Utils():
         return df[column].unique()
 
     def str_to_bool(self, value: str) -> bool:
-        return value.lower() in ("yes", "true", "t", "1")
+        return value.lower() in ("true", "yes", "t", "1")
