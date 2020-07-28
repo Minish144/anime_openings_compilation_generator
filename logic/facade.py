@@ -43,7 +43,10 @@ class Facade():
         return resp
 
     def __get_anime_with_exact_title(self, df: pd.DataFrame, title: str) -> dict:
-        resp = df[df['Anime_Title'] == title]
+        resp: pd.DataFrame = df[df['Anime_Title'] == title]
+
+        if resp.empty:
+            resp: pd.DataFrame = df[df['Anime_Title'].str.lower() == title]
 
         return resp.to_dict('r')
 
@@ -52,13 +55,17 @@ class Facade():
 
         return response
 
-    def get_songs_by_title(self, title: str) -> list:
+    def get_songs_by_title(self, title: str, exact: bool = False) -> list:
         response_list = []
-        titles_list = self.__find_anime_by_query(title)
 
-        for title in titles_list:
-            response_list += self.__get_anime_with_exact_title(self.song_set, title)
-        
+        if exact:
+            response_list += self.__get_anime_with_exact_title(self.song_set, title.lower())
+
+        else:
+            titles_list = self.__find_anime_by_query(title)
+            for title_tmp in titles_list:
+                response_list += self.__get_anime_with_exact_title(self.song_set, title_tmp.lower())
+            
         return {
             'count': len(response_list),
             'items': response_list
