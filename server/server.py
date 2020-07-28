@@ -29,7 +29,7 @@ class Server:
         title: str = flask.request.args.get('title')
         
         if not random:
-            response = self.facade.get_list_of_animes(count=count,
+            response = self.facade.get_list_of_songs_sorted(count=count,
                                                     song_type=song_type)
         else:
             if title:
@@ -51,11 +51,13 @@ class Server:
 
         return flask.jsonify(titles_list)
 
+    def __get_anime_list(self) -> flask.wrappers.Response:
+        pass
 
     def __set_routes(self) -> None:
         self.__api_songs = self.session.route('/api/songs')(self.__get_songs)
         self.__api_songs_anime = self.session.route('/api/songs/<anime_title>')(self.__get_song_list_by_title)
-        self.__get_anime_list = None
+        self.__api_animes = None
 
     def run(self, host: str = '0.0.0.0', port: str = '5000') -> None:
         self.session.run(host=host, 

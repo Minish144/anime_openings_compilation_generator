@@ -118,7 +118,7 @@ class Facade():
                 'items': []
             }
 
-    def get_list_of_animes(self, count: int = None, song_type: int = 4) -> dict:
+    def get_list_of_songs_sorted(self, count: int = None, song_type: int = 4) -> dict:
         df = self.song_set.sort_values(by='Song_Title')
 
         resp = self.__song_type_handle(df=df, 
