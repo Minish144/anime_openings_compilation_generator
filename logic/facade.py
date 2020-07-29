@@ -119,40 +119,64 @@ class Facade():
             }
 
     def get_list_of_songs_sorted(self, count: int = None, song_type: int = 4) -> dict:
-        df = self.song_set.sort_values(by='Song_Title')
+        try:
+            df = self.song_set.sort_values(by='Song_Title')
 
-        resp = self.__song_type_handle(df=df, 
-                            song_type=song_type)
+            resp = self.__song_type_handle(df=df, 
+                                song_type=song_type)
 
-        resp = resp.to_dict('r')
+            resp = resp.to_dict('r')
 
-        count_by_len = len(resp.index)
-        if count:
-            if count_by_len > count:
-                resp = resp[:count]
+            count_by_len = len(resp.index)
+            if count:
+                if count_by_len > count:
+                    resp = resp[:count]
+                else:
+                    count = count_by_len
             else:
                 count = count_by_len
-        else:
-            count = count_by_len
 
-        return {
-            'count': count,
-            'items': resp
-        }
+            return {
+                'count': count,
+                'items': resp
+            }
 
-    def get_list_of_animes(self, count: int = None):
-        resp = list(self.song_set['Anime_Title'].unique())
+        except Exception:
+            print("Exception in user code:")
+            print("-"*60)
+            traceback.print_exc(file=sys.stdout)
+            print("-"*60)
 
-        count_by_len = len(resp)
-        if count:
-            if count_by_len > count:
-                resp = resp[:count]
+            return {
+                'count': 0,
+                'items': []
+            }
+
+    def get_list_of_animes(self, count: int = None) -> dict:
+        try:
+            resp = list(self.song_set['Anime_Title'].unique())
+
+            count_by_len = len(resp)
+            if count:
+                if count_by_len > count:
+                    resp = resp[:count]
+                else:
+                    count = count_by_len
             else:
                 count = count_by_len
-        else:
-            count = count_by_len
-        
-        return {
-            'count': count,
-            'items': resp
-        }
+            
+            return {
+                'count': count,
+                'items': resp
+            }
+
+        except Exception:
+            print("Exception in user code:")
+            print("-"*60)
+            traceback.print_exc(file=sys.stdout)
+            print("-"*60)
+
+            return {
+                'count': 0,
+                'items': []
+            }

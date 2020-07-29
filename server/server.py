@@ -62,7 +62,7 @@ class Server:
     def __set_routes(self) -> None:
         self.__api_songs = self.session.route('/api/songs')(self.__get_songs)
         self.__api_songs_anime = self.session.route('/api/songs/<anime_title>')(self.__get_song_list_by_title)
-        self.__api_animes = self.session.route('/api/anime')(self.__get_anime_list)
+        self.__api_anime = self.session.route('/api/anime')(self.__get_anime_list)
 
     def run(self, host: str = '0.0.0.0', port: str = '5000') -> None:
         self.session.run(host=host, 
