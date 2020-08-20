@@ -18,7 +18,6 @@ class Server:
     def __get_songs(self) -> flask.wrappers.Response:
         random = flask.request.args.get('random')
         random = False if not random else self.utils.str_to_bool(random)
-        
 
         count = flask.request.args.get('count')
         count = int(count) if count else None
