@@ -38,8 +38,6 @@ class Server:
             else:
                 response = self.facade.get_random_webms(count=count, 
                                                         song_type=song_type)
-        
-        response['test'] = 'test'
 
         return flask.jsonify(response)
 
